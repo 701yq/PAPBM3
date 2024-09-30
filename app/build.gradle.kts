@@ -50,7 +50,15 @@ android {
 }
 
 dependencies {
+    // Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
 
+    // Add Firebase dependencies without specifying versions
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
+
+    // Other dependencies...
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -67,3 +75,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+// Add this line to apply the Google services plugin
+apply(plugin = "com.google.gms.google-services")
