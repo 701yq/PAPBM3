@@ -1,0 +1,30 @@
+  {
+  "project_info": {
+    "project_number": "77837551556",
+    "firebase_url": "https://papbprak-78b7c-default-rtdb.firebaseio.com",
+    "project_id": "papbprak-78b7c",
+    "storage_bucket": "papbprak-78b7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77837551556:android:fc8b8684a49e5187574691",
+        "android_client_info": {
+          "package_name": "com.tifd.papbm3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKaMaoiIYuTE5kGNfdveyyHf-MaQF1QTE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

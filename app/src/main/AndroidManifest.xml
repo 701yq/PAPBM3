@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,11 +28,18 @@
             </intent-filter>
         </activity>
 
-        <!-- Tambahkan ListActivity di sini -->
+        <!-- ListActivity yang sudah ada -->
         <activity
             android:name=".ListActivity"
             android:exported="true"
             android:label="List Page"
+            android:theme="@style/Theme.PAPBM3" />
+
+        <!-- Tambahkan GithubProfileActivity di sini -->
+        <activity
+            android:name=".GithubProfileActivity"
+            android:exported="true"
+            android:label="GitHub Profile Page"
             android:theme="@style/Theme.PAPBM3" />
 
     </application>
