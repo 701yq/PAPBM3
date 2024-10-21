@@ -42,5 +42,7 @@
             android:label="GitHub Profile Page"
             android:theme="@style/Theme.PAPBM3" />
 
+        <activity android:name=".MainScreenActivity"/>
+
     </application>
 </manifest>
