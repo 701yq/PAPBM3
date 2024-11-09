@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,8 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PAPBM3"
-        tools:targetApi="31"
-        android:name=".MyApplication">
+        tools:targetApi="31">
 
         <!-- MainActivity yang sudah ada -->
         <activity
@@ -29,21 +25,12 @@
             </intent-filter>
         </activity>
 
-        <!-- ListActivity yang sudah ada -->
+        <!-- Tambahkan ListActivity di sini -->
         <activity
             android:name=".ListActivity"
             android:exported="true"
             android:label="List Page"
             android:theme="@style/Theme.PAPBM3" />
-
-        <!-- Tambahkan GithubProfileActivity di sini -->
-        <activity
-            android:name=".GithubProfileActivity"
-            android:exported="true"
-            android:label="GitHub Profile Page"
-            android:theme="@style/Theme.PAPBM3" />
-
-        <activity android:name=".MainScreenActivity"/>
 
     </application>
 </manifest>

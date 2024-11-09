@@ -1,23 +1,20 @@
 package com.tifd.papbm3
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.widget.Toast  // Tambahkan import Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.*  // Library Compose layout
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.auth.FirebaseAuth  // Tambahkan import FirebaseAuth
+import com.google.firebase.database.*  // Tambahkan Firebase Realtime Database import
 import com.tifd.papbm3.ui.theme.PAPBM3Theme
 
 // Data class untuk menampung informasi mata kuliah
@@ -33,7 +30,6 @@ class ListActivity : ComponentActivity() {
     private val database = FirebaseDatabase.getInstance().getReference("courses")
     private lateinit var auth: FirebaseAuth  // Inisialisasi FirebaseAuth
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,43 +38,37 @@ class ListActivity : ComponentActivity() {
 
         setContent {
             PAPBM3Theme {
-                Scaffold(
-                    topBar = { TopAppBarWithButton() }  // Menambahkan TopAppBar
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(it),
-                        color = MaterialTheme.colorScheme.background
+                    Column(
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize()
+                        // Tampilan daftar mata kuliah
+                        CourseListScreen(
+                            modifier = Modifier
+                                .weight(1f)  // Gunakan weight untuk memenuhi ruang
+                                .fillMaxWidth()
+                        )
+
+                        // Tambah Spacer untuk memberikan ruang
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Tombol Logout
+                        Button(
+                            onClick = {
+                                logoutUser(auth) { message ->
+                                    // Tampilkan pesan logout
+                                    Toast.makeText(this@ListActivity, message, Toast.LENGTH_SHORT).show()
+                                    finish() // Kembali ke MainActivity
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
                         ) {
-                            // Tampilan daftar mata kuliah
-                            CourseListScreen(
-                                modifier = Modifier
-                                    .weight(1f)  // Gunakan weight untuk memenuhi ruang
-                                    .fillMaxWidth()
-                            )
-
-                            // Tambah Spacer untuk memberikan ruang
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            // Tombol Logout
-                            Button(
-                                onClick = {
-                                    logoutUser(auth) { message ->
-                                        // Tampilkan pesan logout
-                                        Toast.makeText(this@ListActivity, message, Toast.LENGTH_SHORT).show()
-                                        finish() // Kembali ke MainActivity
-                                    }
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            ) {
-                                Text("Logout")
-                            }
+                            Text("Logout")
                         }
                     }
                 }
@@ -90,24 +80,6 @@ class ListActivity : ComponentActivity() {
     fun logoutUser(auth: FirebaseAuth, callback: (String) -> Unit) {
         auth.signOut()
         callback("Logged out successfully!")
-    }
-
-    // Fungsi untuk menampilkan TopAppBar dengan button untuk GitHub profile
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun TopAppBarWithButton() {
-        TopAppBar(
-            title = { Text("Course List") },
-            actions = {
-                IconButton(onClick = {
-                    // Navigasi ke GithubProfileActivity
-                    val intent = Intent(this@ListActivity, GithubProfileActivity::class.java)
-                    startActivity(intent)
-                }) {
-                    Icon(Icons.Filled.AccountCircle, contentDescription = "GitHub Profile")
-                }
-            }
-        )
     }
 
     @Composable
