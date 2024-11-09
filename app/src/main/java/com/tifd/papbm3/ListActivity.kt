@@ -33,6 +33,7 @@ class ListActivity : ComponentActivity() {
     private val database = FirebaseDatabase.getInstance().getReference("courses")
     private lateinit var auth: FirebaseAuth  // Inisialisasi FirebaseAuth
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

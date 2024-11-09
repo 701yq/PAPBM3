@@ -2,25 +2,14 @@ package com.tifd.papbm3
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.tifd.papbm3.screen.MatkulScreen
-import com.tifd.papbm3.screen.TugasScreen
-import com.tifd.papbm3.screen.GithubProfileScreen
-import com.tifd.papbm3.navigation.BottomNavBar
-import android.widget.Toast
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,10 +19,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.input.pointer.pointerInput
-import com.tifd.papbm3.ui.theme.PAPBM3Theme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.tifd.papbm3.navigation.BottomNavBar
+import com.tifd.papbm3.screen.MatkulScreen
+import com.tifd.papbm3.screen.TugasScreen
 import com.tifd.papbm3.screen.GithubProfileScreen
+import com.tifd.papbm3.ui.theme.PAPBM3Theme
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -52,7 +49,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Memanggil fungsi MyScreen yang memuat UI login
                     MyScreen(auth)
                 }
             }
@@ -60,18 +56,15 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyScreen(auth: FirebaseAuth) {
-    // State untuk menyimpan input dari pengguna
     var nama by remember { mutableStateOf("") }
     var inputNama by remember { mutableStateOf("") }
     var nim by remember { mutableStateOf("") }
     var inputNim by remember { mutableStateOf("") }
     val context = LocalContext.current
 
-    // Validasi form untuk tombol Submit
     val isFormValid = inputNama.isNotBlank() && inputNim.isNotBlank()
 
     Column(
@@ -83,7 +76,6 @@ fun MyScreen(auth: FirebaseAuth) {
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Input Email (Nama)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -103,13 +95,12 @@ fun MyScreen(auth: FirebaseAuth) {
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp)
+                shape = androidx.compose.material3.Shapes().small
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Input Password (NIM)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -129,34 +120,28 @@ fun MyScreen(auth: FirebaseAuth) {
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp),
+                shape = androidx.compose.material3.Shapes().small,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Tombol Submit dengan logika Firebase Authentication
         Button(
             onClick = {
                 if (isFormValid) {
-                    // Melakukan login dengan Firebase Auth menggunakan email dan password
                     auth.signInWithEmailAndPassword(inputNama, inputNim)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                // Login berhasil, tampilkan pesan dan navigasi ke ListActivity
                                 Toast.makeText(
                                     context,
                                     "Login Berhasil: ${auth.currentUser?.email}",
                                     Toast.LENGTH_LONG
                                 ).show()
 
-                                // Navigasi ke ListActivity
                                 val intent = Intent(context, MainScreenActivity::class.java)
                                 context.startActivity(intent)
-
                             } else {
-                                // Login gagal, tampilkan pesan error
                                 Toast.makeText(
                                     context,
                                     "Login Gagal: ${task.exception?.message}",
@@ -166,21 +151,14 @@ fun MyScreen(auth: FirebaseAuth) {
                         }
                 }
             },
-            enabled = isFormValid,  // Tombol tidak aktif jika form tidak valid
-            modifier = Modifier.pointerInput(Unit) {
-                detectTapGestures(
-                    onLongPress = {
-                        Toast.makeText(context, "Email: $nama, Password: $nim", Toast.LENGTH_LONG).show()
-                    }
-                )
-            }
+            enabled = isFormValid
         ) {
             Text("Login")
         }
     }
 }
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
@@ -188,29 +166,29 @@ fun MainScreen() {
     Scaffold(
         bottomBar = { BottomNavBar(navController = navController) }
     ) { innerPadding ->
-        // Meneruskan innerPadding ke NavHostContainer agar konten tidak terpotong BottomBar
-        NavHostContainer(navController = navController)
+        NavHostContainer(navController = navController, modifier = Modifier.padding(innerPadding))
     }
 }
 
 @Composable
-fun NavHostContainer(navController: NavHostController) {
-    val context = LocalContext.current
-
+fun NavHostContainer(navController: NavHostController, modifier: Modifier = Modifier) {
     var profile by remember { mutableStateOf<GithubProfile?>(null) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        try {
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+        coroutineScope.launch {
+            try {
+                val retrofit = Retrofit.Builder()
+                    .baseUrl("https://api.github.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
 
-            val service = retrofit.create(GithubService::class.java)
-            profile = service.getProfile("701yq")
-        } catch (e: Exception) {
-            errorMessage = e.message
+                val service = retrofit.create(GithubService::class.java)
+                profile = service.getProfile("701yq")
+            } catch (e: Exception) {
+                errorMessage = e.message
+            }
         }
     }
 
@@ -223,11 +201,10 @@ fun NavHostContainer(navController: NavHostController) {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     PAPBM3Theme {
-        MyScreen(FirebaseAuth.getInstance()) // Hanya untuk preview layout
+        MyScreen(FirebaseAuth.getInstance()) // Preview layout only
     }
 }
