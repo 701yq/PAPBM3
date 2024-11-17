@@ -21,7 +21,7 @@ fun BottomNavBar(navController: NavController) {
     val items = listOf(
         NavigationItem("Home", Icons.Default.Home, "home"),
         NavigationItem("Profile", Icons.Default.Person, "profile"),
-        NavigationItem("Settings", Icons.Default.Settings, "settings")
+        NavigationItem("Tugas", Icons.Default.Settings, "settings")
     )
 
     NavigationBar {

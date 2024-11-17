@@ -20,7 +20,6 @@ import com.google.firebase.database.ValueEventListener
 import com.tifd.papbm3.Course
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MatkulScreen(modifier: Modifier = Modifier) {
     var courseList by remember { mutableStateOf(listOf<Course>()) }
@@ -67,7 +66,7 @@ fun TopAppBarWithButton() {
         title = { Text("Course List") },
 
 
-    )
+        )
 }
 
 @Composable

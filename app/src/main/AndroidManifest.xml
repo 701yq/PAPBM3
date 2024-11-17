@@ -2,14 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- Menentukan fitur kamera sebagai opsional -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
 
 
@@ -36,12 +36,21 @@
             </intent-filter>
         </activity>
 
-        <!-- Tambahkan ListActivity di sini -->
+        <!-- ListActivity yang sudah ada -->
         <activity
             android:name=".ListActivity"
             android:exported="true"
             android:label="List Page"
             android:theme="@style/Theme.PAPBM3" />
+
+        <!-- Tambahkan GithubProfileActivity di sini -->
+        <activity
+            android:name=".GithubProfileActivity"
+            android:exported="true"
+            android:label="GitHub Profile Page"
+            android:theme="@style/Theme.PAPBM3" />
+
+        <activity android:name=".MainScreenActivity"/>
 
     </application>
 </manifest>
